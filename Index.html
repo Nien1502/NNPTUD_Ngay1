@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Bài tập Product - Trình bày từng câu</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background: #f8f8f8;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        .question {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px #ddd;
+            margin-bottom: 24px;
+            padding: 20px;
+        }
+
+        .question h2 {
+            color: #2980b9;
+            margin-top: 0;
+        }
+
+        /* ✅ KHỐI TRẢ LỜI DÙNG CHUNG */
+        .answer {
+            background: #f4f6f8;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .answer pre {
+            margin: 0;
+            white-space: pre;     /* giữ xuống dòng */
+            overflow-x: auto;
+        }
+
+        .answer code {
+            font-family: Consolas, monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+<h1>Bài tập Product - Trình bày từng câu</h1>
+
+<div id="questions"></div>
+
+<script src="btap.js"></script>
+
+<script>
+const questions = [
+    {
+        title: "Câu 1",
+        desc: "Khai báo constructor function Product để tạo đối tượng sản phẩm.",
+        answer: `function Product(id, name, price, quantity, category, isAvailable) {
+    this.id = id; // mã sản phẩm
+    this.name = name; // tên sản phẩm
+    this.price = price; // giá sản phẩm
+    this.quantity = quantity; // số lượng tồn kho
+    this.category = category; // danh mục sản phẩm
+    this.isAvailable = isAvailable; // trạng thái bán (true/false)
+}`
+    },
+    {
+        title: "Câu 2",
+        desc: "Khởi tạo mảng products gồm ít nhất 6 sản phẩm, thuộc tối thiểu 2 danh mục khác nhau.",
+        answer: `const products = [
+    new Product(1, "iPhone 17", 35000000, 10, "Electronics", true),
+    new Product(2, "MacBook Air", 25000000, 5, "Electronics", true),
+    new Product(3, "AirPods Pro", 6000000, 0, "Accessories", false),
+    new Product(4, "Apple Watch", 12000000, 3, "Accessories", true),
+    new Product(5, "Samsung TV", 18000000, 2, "Electronics", true),
+    new Product(6, "Mouse Logitech", 800000, 15, "Accessories", true)
+];`
+    },
+    {
+        title: "Câu 3",
+        desc: "Tạo mảng mới chỉ chứa: name, price của mỗi sản phẩm.",
+        answer: () => JSON.stringify(namePriceArr, null, 2)
+    },
+    {
+        title: "Câu 4",
+        desc: "Lọc ra các sản phẩm còn hàng trong kho (quantity > 0).",
+        answer: () => JSON.stringify(inStock, null, 2)
+    },
+    {
+        title: "Câu 5",
+        desc: "Kiểm tra xem có ít nhất một sản phẩm có giá trên 30.000.000 hay không.",
+        answer: () => hasExpensive ? "Có sản phẩm giá > 30 triệu" : "Không có sản phẩm nào giá > 30 triệu"
+    },
+    {
+        title: "Câu 6",
+        desc: "Kiểm tra xem tất cả sản phẩm thuộc danh mục 'Accessories' có đang được bán không.",
+        answer: () => allAccessoriesAvailable ? "Tất cả Accessories đang bán" : "Có Accessories ngừng bán"
+    },
+    {
+        title: "Câu 7",
+        desc: "Tính tổng giá trị kho hàng (price × quantity).",
+        answer: () => totalValue.toLocaleString('vi-VN') + " VND"
+    },
+    {
+        title: "Câu 8",
+        desc: "Dùng for...of duyệt mảng products và in ra: Tên sản phẩm - Danh mục - Trạng thái.",
+        answer: () =>
+            products.map(p =>
+                `${p.name} - ${p.category} - ${p.isAvailable ? "Đang bán" : "Ngừng bán"}`
+            ).join("\n")
+    },
+    {
+        title: "Câu 9",
+        desc: "Dùng for...in để in ra tên thuộc tính và giá trị tương ứng của từng sản phẩm.",
+        answer: () =>
+            products.map(p => {
+                let s = "";
+                for (const key in p) {
+                    s += `Thuộc tính: ${key} | Giá trị: ${p[key]}\n`;
+                }
+                return s + "----------------";
+            }).join("\n")
+    },
+    {
+        title: "Câu 10",
+        desc: "Lấy danh sách tên các sản phẩm đang bán và còn hàng.",
+        answer: () => sellingNames.join(", ")
+    }
+];
+
+// RENDER
+const container = document.getElementById("questions");
+
+questions.forEach((q, i) => {
+    const div = document.createElement("div");
+    div.className = "question";
+
+    const h2 = document.createElement("h2");
+    h2.textContent = q.title;
+
+    const p = document.createElement("p");
+    p.textContent = q.desc;
+
+    div.appendChild(h2);
+    div.appendChild(p);
+
+    const answer = typeof q.answer === "function" ? q.answer() : q.answer;
+
+    const answerBox = document.createElement("div");
+    answerBox.className = "answer";
+
+    // Các câu cần giữ format xuống dòng
+    if ([0, 1, 2, 3, 8].includes(i)) {
+        const pre = document.createElement("pre");
+        const code = document.createElement("code");
+        code.textContent = answer;
+        pre.appendChild(code);
+        answerBox.appendChild(pre);
+    } else {
+        answerBox.innerHTML = answer.replace(/\n/g, "<br>");
+    }
+
+    div.appendChild(answerBox);
+    container.appendChild(div);
+});
+</script>
+</body>
+</html>
